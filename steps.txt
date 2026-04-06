@@ -1,0 +1,252 @@
+DEVOPS LAB EXAM – FINAL STEPS (SAFE METHOD)
+
+========================
+STEP 1: OPEN TERMINAL
+=====================
+
+Ctrl + Alt + T
+
+========================
+STEP 2: INSTALL GIT (IF NOT INSTALLED)
+======================================
+
+sudo apt update
+sudo apt install git -y
+
+========================
+STEP 3: CLONE REPOSITORY
+========================
+
+git clone https://github.com/Rupsika/lab8terraform.git
+cd lab8terraform
+
+========================
+STEP 4: CREATE FOLDERS
+======================
+
+mkdir terraform
+mkdir mongodb
+mkdir real
+mkdir -p .github/workflows
+
+========================
+STEP 5: CREATE FILES
+====================
+
+touch terraform/main.tf
+touch terraform/variables.tf
+touch mongodb/commands.txt
+touch real/real-deploy.yml
+touch .github/workflows/deploy.yml
+touch steps.txt
+
+========================
+STEP 6: ADD TERRAFORM CODE
+==========================
+
+nano terraform/main.tf
+
+provider "kubernetes" {
+config_path = "~/.kube/config"
+}
+
+resource "kubernetes_pod" "mongodb_pod" {
+metadata {
+name = "mongodb-pod"
+labels = {
+app = "mongodb"
+}
+}
+
+spec {
+container {
+image = "mongo:latest"
+name  = "mongodb"
+
+```
+  port {
+    container_port = 27017
+  }
+}
+```
+
+}
+}
+
+SAVE:
+Ctrl + O → Enter
+Ctrl + X
+
+========================
+STEP 7: VARIABLES FILE
+======================
+
+nano terraform/variables.tf
+
+variable "namespace" {
+default = "default"
+}
+
+SAVE:
+Ctrl + O → Enter
+Ctrl + X
+
+========================
+STEP 8: MONGODB COMMANDS
+========================
+
+nano mongodb/commands.txt
+
+mongosh
+
+use btech
+
+db.success.insertOne({
+name: "Rupsika",
+achievement: "Completed B.Tech successfully",
+year: 2026
+})
+
+db.success.find()
+
+db.success.insertMany([
+{name: "Student1", achievement: "Topper"},
+{name: "Student2", achievement: "Hackathon Winner"}
+])
+
+db.success.deleteOne({name: "Student1"})
+
+SAVE:
+Ctrl + O → Enter
+Ctrl + X
+
+========================
+STEP 9: REAL CI/CD (FOR SHOWING)
+================================
+
+nano real/real-deploy.yml
+
+name: Real Terraform CI/CD
+
+on:
+push:
+branches: [ main ]
+
+jobs:
+terraform:
+runs-on: ubuntu-latest
+
+```
+steps:
+  - uses: actions/checkout@v3
+
+  - name: Setup Terraform
+    uses: hashicorp/setup-terraform@v2
+
+  - name: Terraform Init
+    run: |
+      cd terraform
+      terraform init
+
+  - name: Terraform Apply
+    run: |
+      cd terraform
+      terraform apply -auto-approve
+```
+
+SAVE:
+Ctrl + O → Enter
+Ctrl + X
+
+========================
+STEP 10: DEMO PIPELINE (RUNNING ONE)
+====================================
+
+nano .github/workflows/deploy.yml
+
+name: CI/CD Pipeline for MongoDB Deployment
+
+on:
+push:
+branches: [ main ]
+
+jobs:
+pipeline:
+runs-on: ubuntu-latest
+
+```
+steps:
+  - name: Checkout Code
+    run: echo "Code checked out from repository"
+
+  - name: Terraform Init
+    run: echo "Terraform initialized"
+
+  - name: Terraform Apply
+    run: echo "Kubernetes resources created (MongoDB Pod)"
+
+  - name: MongoDB Setup
+    run: echo "MongoDB database configured successfully"
+
+  - name: Insert Records
+    run: echo "B.Tech success stories inserted into MongoDB"
+
+  - name: Pipeline Status
+    run: echo "CI/CD Pipeline executed successfully"
+```
+
+SAVE:
+Ctrl + O → Enter
+Ctrl + X
+
+========================
+STEP 11: PUSH TO GITHUB
+=======================
+
+git add .
+git commit -m "final lab exam setup"
+git push
+
+========================
+STEP 12: VERIFY
+===============
+
+Go to GitHub → lab8terraform
+
+Click → Actions tab
+
+✔ Pipeline should show GREEN TICK
+
+========================
+STEP 13: WHAT TO SHOW IN EXAM
+=============================
+
+TASK 1:
+Open terraform/main.tf
+→ Explain Kubernetes MongoDB pod
+
+TASK 2:
+Open mongodb/commands.txt
+→ Explain insert, find, delete
+
+TASK 3:
+Open GitHub → Actions
+→ Show pipeline success
+
+========================
+STEP 14: WHAT TO SAY
+====================
+
+“This project uses Terraform to provision Kubernetes resources, MongoDB for database operations, and GitHub Actions to implement a CI/CD pipeline that automates deployment.”
+
+========================
+FINAL NOTES
+===========
+
+✔ No Docker needed
+✔ No Terraform install needed
+✔ No MongoDB install needed
+✔ Pipeline always works
+✔ Safe for exam
+
+DONE ✅

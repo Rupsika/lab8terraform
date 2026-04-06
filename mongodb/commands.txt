@@ -1,0 +1,18 @@
+mongosh
+
+use btech
+
+db.success.insertOne({
+name: "Rupsika",
+achievement: "Completed B.Tech successfully",
+year: 2026
+})
+
+db.success.find()
+
+db.success.insertMany([
+{name: "Student1", achievement: "Topper"},
+{name: "Student2", achievement: "Hackathon Winner"}
+])
+
+db.success.deleteOne({name: "Student1"})
